@@ -1,0 +1,40 @@
+A)
+MATCH (m: Meeting)
+RETURN m
+ORDER BY m.duration DESC
+LIMIT 5;
+
+
+B)
+MATCH (a) -[:ATTENDED]-> (m: Meeting)
+WHERE m.mid = "101"
+RETURN a, m
+LIMIT 5;
+
+
+C)
+MATCH (s: Student)
+WHERE NOT exists((s) -[:POSTED]-> (:Post))
+RETURN count(s);
+
+
+D)
+MATCH (s: Student) -[:WATCHED]-> (r: Recording) -[:ASSOCIATED]-> (m: Meeting)
+WHERE m.mname = "Creative Writing14"
+RETURN DISTINCT s.first_name, s.last_name
+ORDER BY s.first_name;
+
+
+E)
+MATCH (s: Student) -[:ENROLLED_IN]-> (c: Course)
+WITH c, count(s) AS studentCount
+WHERE studentCount < 10
+RETURN c.course_id, c.course_name, studentCount
+ORDER BY studentCount DESC;
+
+
+F)
+MATCH (s: Student) -[:POSTED]-> (p: Post) -[:POSTOF]-> (m: Meeting)
+WITH s, count(p.pid) AS countPost
+WHERE countPost > 10
+RETURN 
